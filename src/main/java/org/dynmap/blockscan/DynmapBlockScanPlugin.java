@@ -315,10 +315,16 @@ public class DynmapBlockScanPlugin
         Map<String, BlockModel> models = new HashMap<String, BlockModel>();
 
         ObjectIntIdentityMap<net.minecraft.block.BlockState> bsids = Block.BLOCK_STATE_IDS;
+        int count = bsids.size();
+        int done = 0;
         Block baseb = null;
         Iterator<net.minecraft.block.BlockState> iter = bsids.iterator();
         // Scan blocks and block states
         while (iter.hasNext()) {
+            done++;
+            if(done % 250 == 0) {
+                logger.info("Done with " + done + "/" + count + " blockstate ids");
+            }
             net.minecraft.block.BlockState blkstate = iter.next();
             Block b = blkstate.getBlock();
             if (b == baseb) { continue; }
@@ -401,7 +407,7 @@ public class DynmapBlockScanPlugin
             blockRecords.put(rl.toString(), br);
         }
 
-        logger.info("Loading models....");
+        logger.info("Loading models from " + blockRecords.size() + " records...");
         for (String blkname : blockRecords.keySet()) {
         	BlockRecord br = blockRecords.get(blkname);
         	if (br.sc != null) {
